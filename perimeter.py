@@ -3,11 +3,12 @@ import sys
 def calculate_perimeter(rectangles):
     # Initialize perimeter and dictionary to keep track of overlapping rectangles
     perimeter = 0
-    overlaps = {}
+    overlaps = {i: [] for i in range(len(rectangles))}  # Initialize dictionary with empty lists
 
     # Loop through rectangles and compute perimeter
     for rect in rectangles:
         perimeter += 2 * (rect[2] - rect[0] + rect[3] - rect[1])
+    print("initial perimeter: ", perimeter, "rectangles: ", rectangles)
 
     # Loop through pairs of rectangles and compute overlapping perimeter
     for i in range(len(rectangles)):
@@ -16,34 +17,24 @@ def calculate_perimeter(rectangles):
             # Check if rectangles overlap in x and y axis
             if rect1[0] > rect2[2] or rect1[2] < rect2[0] or rect1[1] > rect2[3] or rect1[3] < rect2[1]:
                 continue
-            # Check if rectangles already in overlap
-            if (i, j) in overlaps or (j, i) in overlaps:
-                continue
-            # Compute overlapping sides and subtract from perimeter
+            # Compute overlapping sides and add rectangles to overlaps dictionary
             overlap_sides = get_overlap_sides(rect1, rect2)
-            perimeter -= 2 * sum(overlap_sides)
-            # Add rectangles to overlaps dictionary
-            if i not in overlaps:
-                overlaps[i] = []
             overlaps[i].append(j)
-            if j not in overlaps:
-                overlaps[j] = []
             overlaps[j].append(i)
-            # Remove overlapping sides between previously overlapping rectangles
-            for k in overlaps[i]:
-                if k == j:
-                    continue
-                if overlap(rectangles[k], rect2):
-                    overlap_sides = get_overlap_sides(rectangles[k], rect2)
-                    perimeter += 2 * sum(overlap_sides)
-            for k in overlaps[j]:
-                if k == i:
-                    continue
-                if overlap(rectangles[k], rect1):
-                    overlap_sides = get_overlap_sides(rectangles[k], rect1)
+            # Subtract overlapping perimeter between the current pair of rectangles
+            perimeter -= 2 * sum(overlap_sides)
+
+        # Subtract overlapping perimeter between the current rectangle and all previously overlapping rectangles
+        for k in overlaps[i]:
+            for l in overlaps[k]:
+                if l in overlaps[i]:
+                    overlap_rect = rectangles[l]
+                    overlap_sides = get_overlap_sides(rectangles[k], overlap_rect)
                     perimeter += 2 * sum(overlap_sides)
 
     return perimeter
+
+
 
 
 def overlap(rect1, rect2):
