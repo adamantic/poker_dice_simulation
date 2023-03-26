@@ -30,7 +30,7 @@ def play():
         if counts.count(2) == 1 and 3 not in counts and 4 not in counts and 5 not in counts:
             return "One pair"
         else:
-            return 'It is a Bust'
+            return 'Bust'
 
     rolls_left = 3
     dice_numbers = roll_dice_ints(5)
@@ -129,8 +129,7 @@ def simulate(n):
             return "Two pair"
         if counts.count(2) == 1 and 3 not in counts and 4 not in counts and 5 not in counts:
             return "One pair"
-        else:
-            return 'It is a Bust'
+
 
     five_of_a_kind = 0
     four_of_a_kind = 0
@@ -139,7 +138,7 @@ def simulate(n):
     three_of_a_kind = 0
     two_pair = 0
     one_pair = 0
-    busts = 0
+
 
     while n > 0:
         hand_str = roll_dice_ints(5)
@@ -159,8 +158,6 @@ def simulate(n):
             two_pair += 1
         if evaluate_hand(hand_str) == "One pair":
             one_pair += 1
-        if evaluate_hand(hand_str) == "It is a Bust":
-            busts += 1
 
         n -= 1
 
@@ -173,16 +170,17 @@ def simulate(n):
     one_pair_p = one_pair / n_copy * 100
 
     # Output the results
-    print(f"Five of a kind: {five_of_a_kind_p:.2f}%")
-    print(f"Four of a kind: {four_of_a_kind_p:.2f}%")
-    print(f"Full house: {full_house_p:.2f}%")
-    print(f"Straight: {straight_p:.2f}%")
-    print(f"Three of a kind: {three_of_a_kind_p:.2f}%")
-    print(f"Two pair: {two_pair_p:.2f}%")
-    print(f"One pair: {one_pair_p:.2f}%")
+    # Print the probabilities with correct spacing
+    print("Five of a kind : {:.2f}%".format(five_of_a_kind_p))
+    print("Four of a kind : {:.2f}%".format(four_of_a_kind_p))
+    print("Full house     : {:.2f}%".format(full_house_p))
+    print("Straight       : {:.2f}%".format(straight_p))
+    print("Three of a kind: {:.2f}%".format(three_of_a_kind_p))
+    print("Two pair       : {:.2f}%".format(two_pair_p))
+    print("One pair       : {:.2f}%".format(one_pair_p))
 
 
-simulate(1000)
+simulate(100)
 
 
 
